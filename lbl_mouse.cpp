@@ -1113,4 +1113,76 @@ double lbl_mouse::get_distance(int x0, int y0, int x1, int y1, int x2, int y2)
     return fabs((y0-y1)*(x2-x1)+(y2-y1)*(x1-x0))/(sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1)));
 }
 
+void lbl_mouse::GaussFilters(cv::Mat src, cv::Mat &dst, int D0, int type)
+{
+    dst = src.clone();
+    for(int k=0; k<3; ++k){
+        GaussFiltersHelper(src,dst,D0,k,type);
+    }
+    if(type==2){
+        histogram_equalization_hsl(dst.clone(), dst);
+    }
+}
+
+void lbl_mouse::GaussFiltersHelper(cv::Mat src, cv::Mat &dst, int D0, int channel, int type)
+{
+    int r=2*D0*D0;
+
+    cv::Mat bgr[3];   //destination array
+    cv::split(src,bgr);
+    //cv::Mat f = bgr[channel];
+    int M = src.cols;
+    int N = src.rows;
+    int P = 2*src.cols;
+    int Q = 2*src.rows;
+    int M_padding = cv::getOptimalDFTSize(M);
+    int N_padding = cv::getOptimalDFTSize(N);
+    cv::Mat pad(N_padding,M_padding,CV_32FC1);
+    for(int x=0;x<pad.cols;++x){
+        for(int y=0;y<pad.rows;++y){
+            if(x < M && y < N){
+               pad.at<float>(y,x) = bgr[channel].at<uchar>(y,x) * int(pow(-1,(x+y)));
+            }
+            else{
+                pad.at<float>(y,x) = 0;
+            }
+        }
+    }
+    cv::Mat planes[] = {cv::Mat_<float>(pad), cv::Mat::zeros(pad.size(), CV_32FC1)};
+    cv::Mat F(pad.size(), CV_32FC2);
+    cv::merge(planes, 2, F);
+    cv::Mat H(F.size(), CV_32FC2);
+    cv::dft(F,F, cv::DFT_SCALE|cv::DFT_COMPLEX_OUTPUT);
+    for(int x=0; x < H.cols; ++x){
+        for(int y=0; y < H.rows; ++y){
+            double D = pow(x-M_padding/2,2) + pow(y-N_padding/2,2);
+            if(type == 0){
+                H.at<cv::Vec2f>(y,x)[0] = expf(-D/r);
+                H.at<cv::Vec2f>(y,x)[1] = expf(-D/r);
+            }
+            else{
+                H.at<cv::Vec2f>(y,x)[0] = 2-expf(-D/r);
+                H.at<cv::Vec2f>(y,x)[1] = 2-expf(-D/r);
+            }
+        }
+    }
+    //cv::Mat G(H.size(), CV_32FC2);
+    cv::multiply(F,H,H);
+    cv::dft(H, H, cv::DFT_INVERSE|cv::DFT_REAL_OUTPUT);
+    //cv::Mat imgout;
+    cv::split(H,planes);
+    //cv::imshow("debug", planes[0]);
+    //cv::normalize(planes[0], imgout, 0, 1, CV_MINMAX);
+    for(int x=0; x<planes[0].cols; ++x){
+        for(int y=0; y<planes[0].rows; ++y){
+            int pixel = int(planes[0].at<float>(y,x) * int(pow(-1,(x+y))));
+            if(pixel > 255) pixel = 255;
+            if(pixel < 0) pixel = 0;
+            dst.at<cv::Vec3b>(y,x)[channel] = pixel;
+            //qDebug() << "debug x: " << x << "y: " << y << "pixel: " << dst.at<cv::Vec3b>(y,x)[channel];
+        }
+    }
+
+}
+
 

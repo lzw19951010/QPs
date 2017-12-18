@@ -75,6 +75,8 @@ public:
     std::vector<std::vector<double>> getRadialMatrix(int kSize);
     void RadialBlur(cv::Mat src, cv::Mat &dst);
     double get_distance(int x0, int y0, int x1, int y1, int x2, int y2);
+    void GaussFilters(cv::Mat src, cv::Mat &dst, int D0, int type);
+    void GaussFiltersHelper(cv::Mat src, cv::Mat &dst, int D0, int channel, int type);
     float degree;
     bool vertical;
     bool horizontal;

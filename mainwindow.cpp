@@ -550,3 +550,55 @@ void MainWindow::on_median_fast_clicked()
         content );
     return;
 }
+
+
+void MainWindow::on_low_Gauss_clicked()
+{
+    if(ui->imgLabel->processedImg.empty()){
+        QMessageBox::information(
+            this,
+            tr("Alert"),
+            tr("请载入图片后再操作！") );
+        return;
+    }
+
+    cv::Mat rawImg = ui->imgLabel->processedImg.clone();
+    int D0 = ui->low_D0->value();
+    ui->imgLabel->GaussFilters(rawImg, ui->imgLabel->processedImg,D0,0);
+    ui->imgLabel->displayImg(ui->imgLabel->processedImg);
+    show_rgbHistogram(ui->imgLabel->processedImg);
+}
+
+void MainWindow::on_Gauss_High_clicked()
+{
+    if(ui->imgLabel->processedImg.empty()){
+        QMessageBox::information(
+            this,
+            tr("Alert"),
+            tr("请载入图片后再操作！") );
+        return;
+    }
+
+    cv::Mat rawImg = ui->imgLabel->processedImg.clone();
+    int D0 = ui->low_D0->value();
+    ui->imgLabel->GaussFilters(rawImg, ui->imgLabel->processedImg,D0,1);
+    ui->imgLabel->displayImg(ui->imgLabel->processedImg);
+    show_rgbHistogram(ui->imgLabel->processedImg);
+}
+
+void MainWindow::on_gauss_fusion_clicked()
+{
+    if(ui->imgLabel->processedImg.empty()){
+        QMessageBox::information(
+            this,
+            tr("Alert"),
+            tr("请载入图片后再操作！") );
+        return;
+    }
+
+    cv::Mat rawImg = ui->imgLabel->processedImg.clone();
+    int D0 = ui->low_D0->value();
+    ui->imgLabel->GaussFilters(rawImg, ui->imgLabel->processedImg,D0,2);
+    ui->imgLabel->displayImg(ui->imgLabel->processedImg);
+    show_rgbHistogram(ui->imgLabel->processedImg);
+}

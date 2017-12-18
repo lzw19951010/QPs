@@ -73,6 +73,9 @@ private slots:
     void on_laplace_clicked();
     void on_r_blur_clicked();
     void on_median_fast_clicked();
+    void on_low_Gauss_clicked();
+    void on_Gauss_High_clicked();
+    void on_gauss_fusion_clicked();
 };
 
 #endif // MAINWINDOW_H

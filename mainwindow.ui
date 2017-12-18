@@ -153,7 +153,7 @@
       <x>20</x>
       <y>190</y>
       <width>111</width>
-      <height>111</height>
+      <height>114</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_5">
@@ -412,8 +412,8 @@
      <rect>
       <x>140</x>
       <y>190</y>
-      <width>91</width>
-      <height>111</height>
+      <width>95</width>
+      <height>114</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -564,7 +564,7 @@
       <x>130</x>
       <y>460</y>
       <width>151</width>
-      <height>61</height>
+      <height>65</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -636,7 +636,7 @@
       <x>20</x>
       <y>670</y>
       <width>271</width>
-      <height>51</height>
+      <height>52</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_7">
@@ -701,6 +701,60 @@
     <property name="text">
      <string>径向模糊</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_8">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>730</y>
+      <width>253</width>
+      <height>122</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_8">
+     <item row="1" column="1">
+      <widget class="QPushButton" name="low_Gauss">
+       <property name="text">
+        <string>高斯低通</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_24">
+       <property name="text">
+        <string>滤波</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>D0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="Gauss_High">
+       <property name="text">
+        <string>高斯高通</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QSpinBox" name="low_D0">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="gauss_fusion">
+       <property name="text">
+        <string>频域锐化</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
